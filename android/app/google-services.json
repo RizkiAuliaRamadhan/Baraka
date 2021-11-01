@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "23942723308",
+    "project_id": "philantropiapp",
+    "storage_bucket": "philantropiapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:23942723308:android:3fb34195b3f766322957c9",
+        "android_client_info": {
+          "package_name": "com.baraka"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "23942723308-b9gbs1l8k63jjldj0u09mkkt56np2kmu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmooK4OoEjp-v_JpDNlOGzqnMbusTIu90"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "23942723308-b9gbs1l8k63jjldj0u09mkkt56np2kmu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
