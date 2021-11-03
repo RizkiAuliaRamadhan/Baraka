@@ -1,26 +1,23 @@
 import {Image, Progress} from 'native-base';
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import { Emas, Pertanian, Uang } from '../../assets/images';
 import {responsiveHeight, responsiveWidth} from '../../utils';
 
 const CardZakat = ({navigation, data}) => {
-  const ContentImage = () => {
-    if (data.image === 'pertanian') {
-      return <Image source={Pertanian} style={styles.image} alt="ImageContent" />;
-    }
-    if (data.image === 'uang') {
-      return <Image style={styles.image} source={Uang} alt="ImageContent" />;
-    }
-    if (data.image === 'emas') {
-      return <Image style={styles.image} source={Emas} alt="ImageContent" />;
-    }
-    return null;
-  };
-
   return (
-    <TouchableOpacity style={styles.cardContent}>
-      <ContentImage />
+    <TouchableOpacity
+      style={styles.cardContent}
+      onPress={() => {
+        navigation.navigate(
+          data.id === '1' ? 'Pertanian' : data.id === '2' ? 'Uang' : 'Emas',
+          data,
+        );
+      }}>
+      <Image
+        source={{uri: data.image}}
+        style={styles.image}
+        alt="ImageContent"
+      />
       <Text style={styles.text}>{data.name}</Text>
     </TouchableOpacity>
   );

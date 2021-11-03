@@ -1,33 +1,23 @@
 import {Image, Progress} from 'native-base';
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {Afganistan, Afrika, MasjidMaluku} from '../../assets/images';
 import {formatNumber, responsiveHeight, responsiveWidth} from '../../utils';
 
 const CardContent = ({navigation, data}) => {
-  const ContentImage = () => {
-    if (data.image === 'masjid') {
-      return (
-        <Image source={MasjidMaluku} style={styles.image} alt="ImageContent" />
-      );
-    }
-    if (data.image === 'afrika') {
-      return <Image style={styles.image} source={Afrika} alt="ImageContent" />;
-    }
-    if (data.image === 'afganistan') {
-      return (
-        <Image style={styles.image} source={Afganistan} alt="ImageContent" />
-      );
-    }
-    return null;
-  };
-
   //progress
   const value = (data.donasi / data.total) * 100;
 
   return (
-    <TouchableOpacity style={styles.cardContent} onPress={() => {navigation.navigate("DetailDonasi", data)}} >
-      <ContentImage />
+    <TouchableOpacity
+      style={styles.cardContent}
+      onPress={() => {
+        navigation.navigate('DetailDonasi', data);
+      }}>
+      <Image
+        source={{uri: data.image}}
+        style={styles.image}
+        alt="ImageContent"
+      />
       <Text style={styles.text}>{data.name}</Text>
       <Progress mt="2.5" value={Math.round(value)} />
       <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>

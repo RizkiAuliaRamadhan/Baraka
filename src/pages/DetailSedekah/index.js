@@ -10,7 +10,7 @@ import {
 import {Back, Centang} from '../../assets/icons';
 import {formatNumber, responsiveHeight, responsiveWidth} from '../../utils';
 
-const DetailDonasi = ({route, navigation}) => {
+const DetailSedekah = ({route, navigation}) => {
   const data = route.params;
   const penerimaDana = data.penerimaDana;
   const penggalangDana = data.penggalangDana;
@@ -22,7 +22,7 @@ const DetailDonasi = ({route, navigation}) => {
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
         {/* header */}
-        <View style={styles.header} >
+        <View style={styles.header}>
           <TouchableOpacity
             style={styles.back}
             onPress={() => navigation.goBack()}>
@@ -195,7 +195,7 @@ const DetailDonasi = ({route, navigation}) => {
   );
 };
 
-export default DetailDonasi;
+export default DetailSedekah;
 
 const styles = StyleSheet.create({
   container: {
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   text: {
     color: '#000',
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
   },
   back: {
     position: 'absolute',
-    left: 0
+    left: 0,
   },
   detailDonasi: {
     marginTop: responsiveHeight(25),

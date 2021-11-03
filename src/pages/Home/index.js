@@ -93,6 +93,7 @@ const Home = ({navigation}) => {
           <Input
             fontSize="18"
             variant="rounded"
+            backgroundColor="#F7FAFF"
             borderColor="#fff"
             placeholder={`Cari donasi "bencana alam"`}
             InputLeftElement={<Search style={styles.iconSearch} />}

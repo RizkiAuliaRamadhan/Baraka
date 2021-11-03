@@ -58,9 +58,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   button: {
-    paddingVertical: 18,
     backgroundColor: MyColors.primary,
     width: responsiveWidth(368),
+    height: responsiveHeight(75),
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',

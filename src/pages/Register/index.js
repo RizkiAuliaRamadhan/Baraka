@@ -1,67 +1,228 @@
-import React, { useState } from "react";
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { MyColors } from "../../utils";
-import { Input } from "native-base";
-import { useDispatch, useSelector } from 'react-redux';
-import {registerUser} from '../../actions/AuthAction';
+import React, {useState, useEffect} from 'react';
+import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {MyColors} from '../../utils';
+import {Button, Input} from 'native-base';
+import {useDispatch, useSelector} from 'react-redux';
+import {loginUser, registerUser} from '../../actions/AuthAction';
+import {clearStorage, getData} from '../../utils/localStorage';
+import auth from '@react-native-firebase/auth';
 
-const Register = ({ navigation }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [vertifikasiPassword, setVertifikasiPassword] = useState("");
+const Register = ({navigation}) => {
+  const [nama, setNama] = useState('');
+  const [tlp, setTlp] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [vertifikasiPassword, setVertifikasiPassword] = useState('');
+  const [cekRegister, setCekRegister] = useState(false);
+  const [pageLogin, setPageLogin] = useState(false);
 
   const dispatch = useDispatch();
 
   const onSubmit = () => {
-    if(email, password, vertifikasiPassword) {
-      const datas = {
-        "email" : email,
-      };
-  
-      dispatch(registerUser(datas, password));
-    }
-    else{
-      Alert.alert('gagal', "Gagal Daftar")
+    if ((nama, tlp, email, password, vertifikasiPassword)) {
+      if (password === vertifikasiPassword) {
+        const datas = {
+          nama,
+          tlp,
+          email,
+        };
+        dispatch(registerUser(datas, password));
+        Alert.alert('Berhasil', 'Selamat Anda Berhasil Daftar', [
+          {
+            text: 'OK',
+            onPress: () => {
+              navigation.replace('BottomTab', {screen: 'Home'});
+            },
+          },
+        ]);
+      } else {
+        Alert.alert('Gagal', 'Password dan Ulangi Password harus sama');
+      }
+    } else {
+      Alert.alert('Gagal', 'Form harus diisi semua');
     }
   };
 
+  const onSubmitLogin = () => {
+    if (email && password) {
+      dispatch(loginUser(email, password))
+      Alert.alert('Berhasil', 'Selamat Anda Berhasil Login', [
+        {
+          text: 'OK',
+          onPress: () => {
+            navigation.replace('BottomTab', {screen: 'Home'});
+          },
+        },
+      ]);
+    } else {
+      Alert.alert('Gagal', 'Form harus diisi semua');
+    }
+  }
+
+  const logout = () => {
+    auth()
+      .signOut()
+      .then(() => {
+        clearStorage();
+        dispatch(registerUser(false, false));
+        dispatch(loginUser(false, false));
+        Alert.alert('Berhasil', 'Selamat Anda Logout', [
+          {
+            text: 'OK',
+            onPress: () => {
+              navigation.replace('BottomTab', {screen: 'Home'});
+            },
+          },
+        ]);
+      });
+  };
+
+  const getUserData = () => {
+    getData('user').then(res => {
+      const data = res;
+
+      if (data) {
+        setCekRegister([data]);
+      } else {
+        setCekRegister(false);
+      }
+    });
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      // do something
+      getUserData();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+  console.log(cekRegister);
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Register</Text>
-      <View style={styles.wrappRegister}>
-        <Text>Email</Text>
-        <Input
-          placeholder="Email"
-          isRequired={true}
-          value={email}
-          onChangeText={(result) => {
-            setEmail(result);
-          }}
-        />
-        <Text>password</Text>
-        <Input
-          placeholder="Password"
-          isRequired={true}
-          value={password}
-          secureTextEntry={true}
-          onChangeText={(result) => {
-            setPassword(result);
-          }}
-        />
-        <Text>vertifikasi password</Text>
-        <Input
-          placeholder="Vertifikasi password"
-          isRequired={true}
-          value={vertifikasiPassword}
-          secureTextEntry={true}
-          onChangeText={(result) => {
-            setVertifikasiPassword(result);
-          }}
-        />
-        <TouchableOpacity style={styles.register} onPress={onSubmit}>
-          <Text style={styles.textWhite}>Register</Text>
-        </TouchableOpacity>
-      </View>
+      {cekRegister ? (
+        <>
+          <TouchableOpacity style={styles.button1} onPress={() => logout()}>
+            <Text style={{color: '#fff', fontSize: 25}}>Logout</Text>
+          </TouchableOpacity>
+        </>
+      ) : pageLogin ? (
+        <>
+          <Text style={styles.title}>Sign In</Text>
+          <View style={styles.card}>
+            <Input
+              placeholder="Email"
+              height="45px"
+              fontSize="18px"
+              value={email}
+              onChangeText={value => {
+                setEmail(value);
+              }}
+            />
+            <Input
+              placeholder="Password (min 6)"
+              height="45px"
+              fontSize="18px"
+              mt="18px"
+              value={password}
+              onChangeText={value => {
+                setPassword(value);
+              }}
+              secureTextEntry={true}
+            />
+            <TouchableOpacity style={styles.button} onPress={() => onSubmitLogin()}>
+              <Text style={{color: '#fff', fontSize: 25}}>Masuk</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setPageLogin(false)}
+              style={{
+                marginTop: 15,
+                flexDirection: 'row',
+                justifyContent: 'center',
+              }}>
+              <Text style={{color: '#000', fontSize: 18}}>
+                Belum punya akun?{' '}
+              </Text>
+              <Text style={{color: '#4FC5D0', fontSize: 18}}>Register</Text>
+            </TouchableOpacity>
+          </View>
+        </>
+      ) : (
+        <>
+          <Text style={styles.title}>Register</Text>
+          <View style={styles.card}>
+            <Input
+              placeholder="Nama"
+              height="45px"
+              fontSize="18px"
+              value={nama}
+              onChangeText={value => {
+                setNama(value);
+              }}
+            />
+            <Input
+              placeholder="Nomer Telepon"
+              height="45px"
+              fontSize="18px"
+              mt="18px"
+              value={tlp}
+              onChangeText={value => {
+                setTlp(value);
+              }}
+              keyboardType="number-pad"
+            />
+            <Input
+              placeholder="Email"
+              height="45px"
+              fontSize="18px"
+              mt="18px"
+              value={email}
+              onChangeText={value => {
+                setEmail(value);
+              }}
+            />
+            <Input
+              placeholder="Password (min 6)"
+              height="45px"
+              fontSize="18px"
+              mt="18px"
+              value={password}
+              onChangeText={value => {
+                setPassword(value);
+              }}
+              secureTextEntry={true}
+            />
+            <Input
+              placeholder="Ulangi Password (min 6)"
+              height="45px"
+              fontSize="18px"
+              mt="18px"
+              value={vertifikasiPassword}
+              onChangeText={value => {
+                setVertifikasiPassword(value);
+              }}
+              secureTextEntry={true}
+            />
+            <TouchableOpacity style={styles.button} onPress={() => onSubmit()}>
+              <Text style={{color: '#fff', fontSize: 25}}>Daftar Sekarang</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setPageLogin(true)}
+              style={{
+                marginTop: 15,
+                flexDirection: 'row',
+                justifyContent: 'center',
+              }}>
+              <Text style={{color: '#000', fontSize: 18}}>
+                Sudah punya akun?{' '}
+              </Text>
+              <Text style={{color: '#4FC5D0', fontSize: 18}}>Masuk</Text>
+            </TouchableOpacity>
+          </View>
+        </>
+      )}
     </View>
   );
 };
@@ -72,27 +233,35 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: MyColors.white,
-    justifyContent: "center",
-    alignItems: "center"
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 40,
   },
   title: {
-    fontSize: 20,
-    fontWeight: "bold"
+    fontSize: 24,
+    color: '#000',
+    marginTop: -70,
   },
-  wrappRegister: {
-    padding: 10,
-    borderWidth: 1,
-    width: "75%"
+  card: {
+    width: '100%',
+    marginTop: 45,
   },
-  register: {
+  button: {
     paddingVertical: 10,
-    paddingHorizontal: 5,
-    backgroundColor: MyColors.primary,
+    width: '100%',
+    backgroundColor: '#4FC5D0',
+    marginTop: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: 10,
-    justifyContent: "center",
-    alignItems: "center"
   },
-  textWhite: {
-    color: "white"
-  }
+  button1: {
+    paddingVertical: 10,
+    width: '100%',
+    backgroundColor: '#E34624',
+    marginTop: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+  },
 });

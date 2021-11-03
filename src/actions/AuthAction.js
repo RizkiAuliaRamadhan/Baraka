@@ -25,12 +25,10 @@ export const registerUser = (data, password) => {
             ...data,
             "uid": res.user.uid,
           };
-          console.log(dataBaru);
           // simpan ke firebase realtime database
           database()
             .ref('/users/' + res.user.uid)
             .set(dataBaru)
-            .then(() => console.log("berhasil set"))
           // success
           dispatchSuccess(dispatch, REGISTER_USER, dataBaru);
           // asyncronus storage

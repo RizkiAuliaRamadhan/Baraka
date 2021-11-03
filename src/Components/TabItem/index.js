@@ -16,7 +16,7 @@ const TabItem = ({isFocused, onLongPress, onPress, label}) => {
     if (label === 'Home') {
       return isFocused ? <HomeActive /> : <Home />;
     }
-    if (label === 'File') {
+    if (label === 'Catatan') {
       return isFocused ? <FileActive /> : <File />;
     }
     if (label === 'About') {
