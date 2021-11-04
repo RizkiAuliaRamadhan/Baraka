@@ -18,6 +18,10 @@ const DetailDonasi = ({route, navigation}) => {
 
   //progress
   const value = (data.donasi / data.total) * 100;
+
+  const onSubmitDonasi = () => {
+    navigation.navigate("DetailDonasi2")
+  }
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
@@ -188,7 +192,7 @@ const DetailDonasi = ({route, navigation}) => {
         </View>
         <View style={{marginBottom: 20}} />
       </View>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={() => {onSubmitDonasi()}} >
         <Text style={styles.textButton}>Donasi Sekarang</Text>
       </TouchableOpacity>
     </ScrollView>

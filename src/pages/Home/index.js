@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,29 +6,50 @@ import {
   View,
   ScrollView,
 } from 'react-native';
-import {getData} from '../../utils/localStorage';
 import {dataContents, responsiveHeight, responsiveWidth} from '../../utils';
 import {Menu, Search} from '../../assets/icons';
-import {Image, Input} from 'native-base';
-import {Sedekah} from '../../assets/images';
+import {Input} from 'native-base';
 import {CardContent, CardZakat, Kategori} from '../../Components';
-import CardSedekah from '../../Components/CardSedekah';
-import { dataSedekah } from '../../utils/DummyData/sedekah';
-import { dataZakat } from '../../utils/DummyData/zakat';
+import {dataZakat} from '../../utils/DummyData/zakat';
+import {useDispatch, useSelector} from 'react-redux';
+import {getContents} from '../../actions/ContentAction';
 
 const Home = ({navigation}) => {
-  const DataContent = dataContents;
-  const DataSedekah = dataSedekah
-  const DataZakat = dataZakat
+  const DataZakat = dataZakat;
 
   const [kategori, setKategori] = useState('Donasi');
+  const [search, setSearch] = useState('');
+
+  // redux
+  const dispatch = useDispatch();
+  const contentRedux = useSelector(
+    state => state.ContentsReducer.contentsResult,
+  );
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      // do something
+      dispatch(getContents());
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+  const onSubmitSearch = () => {
+    dispatch(getContents(search))
+  }
 
   const Donasi = () => {
     return (
       <>
-        {DataContent.map((value, index) => {
+        {Object.keys(contentRedux).map((key, index) => {
+          console.log("key : " + key);
           return (
-            <CardContent navigation={navigation} data={value} key={index} />
+            <>
+              {contentRedux[key].kategori === 'donasi' ? (
+                <CardContent navigation={navigation} data={contentRedux[key]} key={index} />
+              ) : null}
+            </>
           );
         })}
       </>
@@ -38,9 +59,14 @@ const Home = ({navigation}) => {
   const Sedekah = () => {
     return (
       <>
-        {DataSedekah.map((value, index) => {
+        {Object.keys(contentRedux).map((key, index) => {
+          console.log("key : " + key);
           return (
-            <CardSedekah navigation={navigation} data={value} key={index} />
+            <>
+              {contentRedux[key].kategori === 'sedekah' ? (
+                <CardContent navigation={navigation} data={contentRedux[key]} key={index} />
+              ) : null}
+            </>
           );
         })}
       </>
@@ -51,9 +77,7 @@ const Home = ({navigation}) => {
     return (
       <>
         {DataZakat.map((value, index) => {
-          return (
-            <CardZakat navigation={navigation} data={value} key={index} />
-          );
+          return <CardZakat navigation={navigation} data={value} key={index} />;
         })}
       </>
     );
@@ -63,11 +87,11 @@ const Home = ({navigation}) => {
     return (
       <>
         {kategori === 'Donasi' ? (
-          <Donasi />
+          <Donasi key={true} />
         ) : kategori === 'Sedekah' ? (
-          <Sedekah />
+          <Sedekah key={true} />
         ) : kategori === 'Zakat' ? (
-          <Zakat />
+          <Zakat key={true} />
         ) : (
           <Text>Data Kosong</Text>
         )}
@@ -84,18 +108,18 @@ const Home = ({navigation}) => {
             <Text style={styles.text1}>Mari sisihkan harta kita</Text>
             <Text style={styles.text1}>untuk membantu sesama</Text>
           </View>
-          <TouchableOpacity style={styles.menu}>
-            <Menu />
-          </TouchableOpacity>
         </View>
         {/* Search */}
         <View style={{marginVertical: responsiveHeight(25)}}>
           <Input
+            value={search}
+            onChangeText={value => setSearch(value)}
+            onSubmitEditing={() => onSubmitSearch()}
+            placeholder={`Cari donasi "bencana alam"`}
             fontSize="18"
             variant="rounded"
             backgroundColor="#F7FAFF"
             borderColor="#fff"
-            placeholder={`Cari donasi "bencana alam"`}
             InputLeftElement={<Search style={styles.iconSearch} />}
           />
         </View>
@@ -138,10 +162,7 @@ const styles = StyleSheet.create({
     paddingVertical: responsiveHeight(10),
     backgroundColor: '#fff',
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
+  header: {},
   text1: {
     fontSize: 18,
     color: '#000',

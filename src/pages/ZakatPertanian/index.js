@@ -9,6 +9,7 @@ import {
 import {Back} from '../../assets/icons';
 import {formatNumber, responsiveHeight, responsiveWidth} from '../../utils';
 import {Image, Input, Select, CheckIcon} from 'native-base';
+import CurrencyInput from 'react-native-currency-input';
 
 const ZakatPertanian = ({route, navigation}) => {
   const data = route.params;
@@ -17,15 +18,16 @@ const ZakatPertanian = ({route, navigation}) => {
   const [pertanian, setPertanian] = useState('');
   const [jenis, setJenis] = useState('');
   const [totalZakat, setTotalZakat] = useState('');
+  const [focus, setFocus] = useState('#d6d3d1');
 
   const CekTotalZakat = () => {
     if (pertanian >= nishab) {
       if (jenis === 'biaya') {
         setTotalZakat((pertanian * 5) / 100);
-        return <Text style={styles.text4}>{totalZakat} KG</Text>;
+        return <Text style={styles.text4}>{formatNumber(totalZakat)} KG</Text>;
       } else if (jenis === 'tanpaBiaya') {
         setTotalZakat((pertanian * 10) / 100);
-        return <Text style={styles.text4}>{totalZakat} KG</Text>;
+        return <Text style={styles.text4}>{formatNumber(totalZakat)} KG</Text>;
       } else {
         return <Text style={styles.text4}>Jumlah Dalam KG</Text>;
       }
@@ -58,16 +60,20 @@ const ZakatPertanian = ({route, navigation}) => {
         {/* Kalkulator Zakat */}
         <View style={styles.cardKalkulator}>
           <Text style={styles.text2}>Biji - bijian & Buah - buahan</Text>
-          <Input
-            height="45px"
-            fontSize="16px"
-            placeholder="Jumlah dalam KG"
-            mt="2.5"
-            keyboardType="numeric"
+          <CurrencyInput
             value={pertanian}
-            onChangeText={value => {
-              setPertanian(value);
+            onChangeValue={setPertanian}
+            delimiter="."
+            precision={0}
+            style={styles.input(focus)}
+            onFocus={() => {
+              setFocus('#38bdf8');
             }}
+            onBlur={() => {
+              setFocus('#d6d3d1');
+            }}
+            placeholder="Emas dalam gram"
+            selectionColor="#000"
           />
           <View style={{marginTop: 20}} />
           <Text style={styles.text2}>Jenis Pengairan</Text>
@@ -218,5 +224,16 @@ const styles = StyleSheet.create({
   textButton: {
     fontSize: 20,
     color: '#fff'
-  }
+  },
+  input: focus => ({
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    backgroundColor: '#fff',
+    marginTop: 10,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: focus,
+    height: 45,
+    fontSize: 16,
+  }),
 });

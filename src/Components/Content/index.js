@@ -1,7 +1,7 @@
 import {Image, Progress} from 'native-base';
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {formatNumber, responsiveHeight, responsiveWidth} from '../../utils';
+import {formatNumber, kapital, responsiveHeight, responsiveWidth} from '../../utils';
 
 const CardContent = ({navigation, data}) => {
   //progress
@@ -18,7 +18,7 @@ const CardContent = ({navigation, data}) => {
         style={styles.image}
         alt="ImageContent"
       />
-      <Text style={styles.text}>{data.name}</Text>
+      <Text style={styles.text}>{kapital(data.name)}</Text>
       <Progress mt="2.5" value={Math.round(value)} />
       <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
         <Text style={styles.text2}>Rp {formatNumber(data.total)}</Text>

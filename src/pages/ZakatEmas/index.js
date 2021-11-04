@@ -9,6 +9,7 @@ import {
 import {Back} from '../../assets/icons';
 import {formatNumber, responsiveHeight, responsiveWidth} from '../../utils';
 import {Image, Input, Select, CheckIcon} from 'native-base';
+import CurrencyInput from 'react-native-currency-input';
 
 const ZakatEmas = ({route, navigation}) => {
   const data = route.params;
@@ -19,32 +20,36 @@ const ZakatEmas = ({route, navigation}) => {
   const [hargaPerak, setHargaPerak] = useState('');
   const [totalZakatPerak, setTotalZakatPerak] = useState('');
   const [totalZakatEmas, setTotalZakatEmas] = useState('');
+  const [focus, setFocus] = useState('#d6d3d1');
+  const [focus1, setFocus1] = useState('#d6d3d1');
+  const [focus2, setFocus2] = useState('#d6d3d1');
+  const [focus3, setFocus3] = useState('#d6d3d1');
 
   const nishabEmas = 85;
   const nishabPerak = 595;
 
   const CekTotalZakatEmas = () => {
     if (emas >= nishabEmas) {
-      setTotalZakatEmas(hargaEmas * emas * 2.5 / 100)
-      return (<Text style={styles.text5} >{totalZakatEmas}</Text>)
-    }else{
-      return <Text style={styles.text4} >Total Zakat Emas</Text>
+      setTotalZakatEmas((hargaEmas * emas * 2.5) / 100);
+      return <Text style={styles.text5}>Rp {formatNumber(totalZakatEmas)}</Text>;
+    } else {
+      return <Text style={styles.text4}>Total Zakat Emas</Text>;
     }
   };
   const CekTotalZakatPerak = () => {
     if (perak >= nishabPerak) {
-      setTotalZakatPerak(hargaPerak * perak * 2.5 / 100)
-      return (<Text style={styles.text5} >{totalZakatPerak}</Text>)
-    }else{
-      return <Text style={styles.text4} >Total Zakat Perak</Text>
+      setTotalZakatPerak((hargaPerak * perak * 2.5) / 100);
+      return <Text style={styles.text5}>Rp {formatNumber(totalZakatPerak)}</Text>;
+    } else {
+      return <Text style={styles.text4}>Total Zakat Perak</Text>;
     }
   };
   const TotalZakat = () => {
     if (perak >= nishabPerak || emas >= nishabEmas) {
-      const Total = totalZakatEmas + totalZakatPerak
-      return (<Text style={styles.text5} >{Total}</Text>)
-    }else{
-      return <Text style={styles.text4} >Total Zakat Emas & Perak</Text>
+      const Total = totalZakatEmas + totalZakatPerak;
+      return <Text style={styles.text5}>Rp {formatNumber(Total)}</Text>;
+    } else {
+      return <Text style={styles.text4}>Total Zakat Emas & Perak</Text>;
     }
   };
 
@@ -72,55 +77,73 @@ const ZakatEmas = ({route, navigation}) => {
         {/* Kalkulator Zakat */}
         <View style={styles.cardKalkulator}>
           <Text style={styles.text2}>Emas yang dimiliki</Text>
-          <Input
-            height="45px"
-            fontSize="16px"
-            placeholder="Emas dalam gram"
-            mt="2.5"
-            keyboardType="numeric"
+          <CurrencyInput
             value={emas}
-            onChangeText={value => {
-              setEmas(value);
+            onChangeValue={setEmas}
+            delimiter="."
+            precision={0}
+            style={styles.input(focus)}
+            onFocus={() => {
+              setFocus('#38bdf8');
             }}
+            onBlur={() => {
+              setFocus('#d6d3d1');
+            }}
+            placeholder="Emas dalam gram"
+            selectionColor="#000"
           />
           <View style={{marginTop: 20}} />
           <Text style={styles.text2}>Perak yang dimiliki</Text>
-          <Input
-            height="45px"
-            fontSize="16px"
-            placeholder="Perak dalam gram"
-            mt="2.5"
-            keyboardType="numeric"
-            value={perak}
-            onChangeText={value => {
-              setPerak(value);
+          <CurrencyInput
+            onFocus={() => {
+              setFocus1('#38bdf8');
             }}
+            onBlur={() => {
+              setFocus1('#d6d3d1');
+            }}
+            placeholder="Perak dalam gram"
+            selectionColor="#000"
+            style={styles.input(focus1)}
+            value={perak}
+            onChangeValue={setPerak}
+            delimiter="."
+            precision={0}
           />
           <View style={{marginTop: 20}} />
           <Text style={styles.text2}>Harga 1 gram Emas</Text>
-          <Input
-            height="45px"
-            fontSize="16px"
-            placeholder="Rupiah"
-            mt="2.5"
-            keyboardType="numeric"
-            value={hargaEmas}
-            onChangeText={value => {
-              setHargaEmas(value);
+          <CurrencyInput
+            onFocus={() => {
+              setFocus2('#38bdf8');
             }}
+            onBlur={() => {
+              setFocus2('#d6d3d1');
+            }}
+            placeholder="Rupiah"
+            selectionColor="#000"
+            style={styles.input(focus2)}
+            value={hargaEmas}
+            onChangeValue={setHargaEmas}
+            prefix="Rp "
+            delimiter="."
+            precision={0}
           />
           <View style={{marginTop: 20}} />
           <Text style={styles.text2}>Harga 1 gram Perak</Text>
-          <Input
-            height="45px"
-            fontSize="16px"
-            placeholder="Rupiah"
-            mt="2.5"
-            keyboardType="numeric"
-            value={hargaPerak}
-            onChangeText={value => {
-              setHargaPerak(value);
+          <CurrencyInput
+            onFocus={() => {
+              setFocus3('#38bdf8');
             }}
+            onBlur={() => {
+              setFocus3('#d6d3d1');
+            }}
+            placeholder="Rupiah"
+            selectionColor="#000"
+            style={styles.input(focus3)}
+            value={hargaPerak}
+            onChangeValue={setHargaPerak}
+            prefix="Rp "
+            delimiter="."
+            precision={0}
           />
           <View style={{marginTop: 20}} />
           <Text style={styles.text2}>Zakat Emas ( dibayar dengan uang )</Text>
@@ -255,7 +278,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 10,
     backgroundColor: '#fff',
-    marginTop: 20,
+    marginTop: 10,
     borderRadius: 3,
     borderWidth: 0.2,
     borderColor: '#999',
@@ -270,4 +293,15 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#fff',
   },
+  input: focus => ({
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    backgroundColor: '#fff',
+    marginTop: 10,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: focus,
+    height: 45,
+    fontSize: 16,
+  }),
 });

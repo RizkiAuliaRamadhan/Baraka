@@ -9,6 +9,7 @@ import {
 import {Back} from '../../assets/icons';
 import {formatNumber, responsiveHeight, responsiveWidth} from '../../utils';
 import {Image, Input, Select, CheckIcon} from 'native-base';
+import CurrencyInput from 'react-native-currency-input';
 
 const ZakatPertanian = ({route, navigation}) => {
   const data = route.params;
@@ -26,10 +27,17 @@ const ZakatPertanian = ({route, navigation}) => {
 
   const [selisihHarta, setSelisihHarta] = useState('');
 
+  const [focus, setFocus] = useState('#d6d3d1');
+  const [focus1, setFocus1] = useState('#d6d3d1');
+  const [focus2, setFocus2] = useState('#d6d3d1');
+  const [focus3, setFocus3] = useState('#d6d3d1');
+  const [focus4, setFocus4] = useState('#d6d3d1');
+  const [focus5, setFocus5] = useState('#d6d3d1');
+
   const CekTotalNishab = () => {
     if (hargaEmas !== '') {
       setNishab(hargaEmas * 85);
-      return <Text style={styles.text5}>{formatNumber(nishab)}</Text>;
+      return <Text style={styles.text5}>Rp {formatNumber(nishab)}</Text>;
     } else if (hargaPerak !== '') {
       setNishab(hargaPerak * 595);
       return <Text style={styles.text5}>Rp {formatNumber(nishab)}</Text>;
@@ -41,16 +49,16 @@ const ZakatPertanian = ({route, navigation}) => {
   const CekTotalHarta = () => {
     if (uangTunai !== '' && surat !== '' && piutang !== '') {
       setTotalHarta(parseInt(uangTunai) + parseInt(surat) + parseInt(piutang));
-      return <Text style={styles.text5}>{formatNumber(totalHarta)}</Text>;
+      return <Text style={styles.text5}>Rp {formatNumber(totalHarta)}</Text>;
     } else if (uangTunai !== '' && surat !== '') {
       setTotalHarta(parseInt(uangTunai) + parseInt(surat));
-      return <Text style={styles.text5}>{formatNumber(totalHarta)}</Text>;
+      return <Text style={styles.text5}>Rp {formatNumber(totalHarta)}</Text>;
     } else if (uangTunai !== '' && piutang !== '') {
       setTotalHarta(parseInt(uangTunai) + parseInt(piutang));
-      return <Text style={styles.text5}>{formatNumber(totalHarta)}</Text>;
+      return <Text style={styles.text5}>Rp {formatNumber(totalHarta)}</Text>;
     } else if (uangTunai !== '') {
       setTotalHarta(parseInt(uangTunai));
-      return <Text style={styles.text5}>{formatNumber(totalHarta)}</Text>;
+      return <Text style={styles.text5}>Rp {formatNumber(totalHarta)}</Text>;
     } else {
       return <Text style={styles.text4}>Rupiah</Text>;
     }
@@ -59,13 +67,13 @@ const ZakatPertanian = ({route, navigation}) => {
   const SelisihHartaKewajiban = () => {
     if (hutang !== '' && kewajiban !== '') {
       setSelisihHarta(totalHarta - (parseInt(hutang) + parseInt(kewajiban)));
-      return <Text style={styles.text5}>{formatNumber(selisihHarta)}</Text>;
+      return <Text style={styles.text5}>Rp {formatNumber(selisihHarta)}</Text>;
     } else if (hutang !== '') {
       setSelisihHarta(totalHarta - parseInt(hutang));
-      return <Text style={styles.text5}>{formatNumber(selisihHarta)}</Text>;
+      return <Text style={styles.text5}>Rp {formatNumber(selisihHarta)}</Text>;
     } else if (kewajiban !== '') {
       setSelisihHarta(totalHarta - parseInt(kewajiban));
-      return <Text style={styles.text5}>{formatNumber(selisihHarta)}</Text>;
+      return <Text style={styles.text5}>Rp {formatNumber(selisihHarta)}</Text>;
     } else {
       return <Text style={styles.text4}>Rupiah</Text>;
     }
@@ -75,7 +83,7 @@ const ZakatPertanian = ({route, navigation}) => {
     if (selisihHarta !== '') {
       if (selisihHarta >= nishab) {
         const totalZakat = (selisihHarta * 2.5) / 100;
-        return <Text style={styles.text5}>{formatNumber(totalZakat)}</Text>;
+        return <Text style={styles.text5}>Rp {formatNumber(totalZakat)}</Text>;
       } else {
         return <Text style={styles.text4}>Tidak wajib zakat</Text>;
       }
@@ -127,31 +135,41 @@ const ZakatPertanian = ({route, navigation}) => {
           {cekNishab === 'emas' ? (
             <>
               <Text style={styles.text2}>Harga 1 Gram Emas</Text>
-              <Input
-                height="45px"
-                fontSize="16px"
-                placeholder="Rupiah"
-                mt="2.5"
-                keyboardType="numeric"
+              <CurrencyInput
                 value={hargaEmas}
-                onChangeText={value => {
-                  setHargaEmas(value);
+                onChangeValue={setHargaEmas}
+                prefix="Rp "
+                delimiter="."
+                precision={0}
+                style={styles.input(focus)}
+                onFocus={() => {
+                  setFocus('#38bdf8');
                 }}
+                onBlur={() => {
+                  setFocus('#d6d3d1');
+                }}
+                placeholder="Rupiah"
+                selectionColor="#000"
               />
             </>
           ) : cekNishab === 'perak' ? (
             <>
               <Text style={styles.text2}>Harga 1 Gram Perak</Text>
-              <Input
-                height="45px"
-                fontSize="16px"
-                placeholder="Rupiah"
-                mt="2.5"
-                keyboardType="numeric"
+              <CurrencyInput
                 value={hargaPerak}
-                onChangeText={value => {
-                  setHargaPerak(value);
+                onChangeValue={setHargaPerak}
+                prefix="Rp "
+                delimiter="."
+                precision={0}
+                style={styles.input(focus)}
+                onFocus={() => {
+                  setFocus('#38bdf8');
                 }}
+                onBlur={() => {
+                  setFocus('#d6d3d1');
+                }}
+                placeholder="Rupiah"
+                selectionColor="#000"
               />
             </>
           ) : (
@@ -164,42 +182,57 @@ const ZakatPertanian = ({route, navigation}) => {
           </View>
           <View style={{marginTop: 20}} />
           <Text style={styles.text2}>Uang Tunai & Tabungan</Text>
-          <Input
-            height="45px"
-            fontSize="16px"
-            placeholder="Rupiah"
-            mt="2.5"
-            keyboardType="numeric"
+          <CurrencyInput
             value={uangTunai}
-            onChangeText={value => {
-              setUangTunai(value);
+            onChangeValue={setUangTunai}
+            prefix="Rp "
+            delimiter="."
+            precision={0}
+            style={styles.input(focus1)}
+            onFocus={() => {
+              setFocus1('#38bdf8');
             }}
+            onBlur={() => {
+              setFocus1('#d6d3d1');
+            }}
+            placeholder="Rupiah"
+            selectionColor="#000"
           />
           <View style={{marginTop: 20}} />
           <Text style={styles.text2}>Surat Berharga</Text>
-          <Input
-            height="45px"
-            fontSize="16px"
-            placeholder="Rupiah"
-            mt="2.5"
-            keyboardType="numeric"
+          <CurrencyInput
             value={surat}
-            onChangeText={value => {
-              setSurat(value);
+            onChangeValue={setSurat}
+            prefix="Rp "
+            delimiter="."
+            precision={0}
+            style={styles.input(focus2)}
+            onFocus={() => {
+              setFocus2('#38bdf8');
             }}
+            onBlur={() => {
+              setFocus2('#d6d3d1');
+            }}
+            placeholder="Rupiah"
+            selectionColor="#000"
           />
           <View style={{marginTop: 20}} />
           <Text style={styles.text2}>Piutang</Text>
-          <Input
-            height="45px"
-            fontSize="16px"
-            placeholder="Rupiah"
-            mt="2.5"
-            keyboardType="numeric"
+          <CurrencyInput
             value={piutang}
-            onChangeText={value => {
-              setPiutang(value);
+            onChangeValue={setPiutang}
+            prefix="Rp "
+            delimiter="."
+            precision={0}
+            style={styles.input(focus3)}
+            onFocus={() => {
+              setFocus3('#38bdf8');
             }}
+            onBlur={() => {
+              setFocus3('#d6d3d1');
+            }}
+            placeholder="Rupiah"
+            selectionColor="#000"
           />
           <View style={{marginTop: 20}} />
           <Text style={styles.text2}>Total Harta</Text>
@@ -208,29 +241,39 @@ const ZakatPertanian = ({route, navigation}) => {
           </View>
           <View style={{marginTop: 20}} />
           <Text style={styles.text2}>Hutang</Text>
-          <Input
-            height="45px"
-            fontSize="16px"
-            placeholder="Rupiah"
-            mt="2.5"
-            keyboardType="numeric"
+          <CurrencyInput
             value={hutang}
-            onChangeText={value => {
-              setHutang(value);
+            onChangeValue={setHutang}
+            prefix="Rp "
+            delimiter="."
+            precision={0}
+            style={styles.input(focus4)}
+            onFocus={() => {
+              setFocus4('#38bdf8');
             }}
+            onBlur={() => {
+              setFocus4('#d6d3d1');
+            }}
+            placeholder="Rupiah"
+            selectionColor="#000"
           />
           <View style={{marginTop: 20}} />
           <Text style={styles.text2}>Total Kewajiban</Text>
-          <Input
-            height="45px"
-            fontSize="16px"
-            placeholder="Rupiah"
-            mt="2.5"
-            keyboardType="numeric"
+          <CurrencyInput
             value={kewajiban}
-            onChangeText={value => {
-              setKewajiban(value);
+            onChangeValue={setKewajiban}
+            prefix="Rp "
+            delimiter="."
+            precision={0}
+            style={styles.input(focus5)}
+            onFocus={() => {
+              setFocus5('#38bdf8');
             }}
+            onBlur={() => {
+              setFocus5('#d6d3d1');
+            }}
+            placeholder="Rupiah"
+            selectionColor="#000"
           />
           <View style={{marginTop: 20}} />
           <Text style={styles.text2}>Selisih Harta & Kewajiban</Text>
@@ -375,4 +418,15 @@ const styles = StyleSheet.create({
     color: '#000',
     fontSize: 16,
   },
+  input: focus => ({
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    backgroundColor: '#fff',
+    marginTop: 10,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: focus,
+    height: 45,
+    fontSize: 16,
+  }),
 });
