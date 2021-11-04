@@ -1673,6 +1673,11 @@
   resolved "https://registry.yarnpkg.com/@react-native-firebase/database/-/database-13.0.0.tgz#66986d070b397479c40dd2d92a08603c08320bf7"
   integrity sha512-1krXipSwJs2iHd6j+tR0xCySiUM51Ma6uyJB3GyAg7bNSgt8KzmiNBkn6xDByYlcbcraKRGEkohrRCwbmQWdtA==
 
+"@react-native-firebase/storage@^13.0.0":
+  version "13.0.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/storage/-/storage-13.0.0.tgz#c0404e1d97ab694e3d31a494ce900a9e8b35b4eb"
+  integrity sha512-lNdg7LcRmaHEaJiauwAm6FOeNVx5vjunYbQbn7j4/b3MAZC4uQH/1BHIRajcOmEpVUvG8g4WgzRzbml0ThJBCg==
+
 "@react-native/assets@1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@react-native/assets/-/assets-1.0.0.tgz#c6f9bf63d274bafc8e970628de24986b30a55c8e"
@@ -6849,6 +6854,11 @@ react-native-currency-input@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/react-native-currency-input/-/react-native-currency-input-1.0.1.tgz#3118a0d5347dd29568c5031320dbeb34be43415c"
   integrity sha512-1AbXXMAyNBEV2M0snh6e/B1w+rxRBgu9IARVaeF0tkUuaGX4kl/tQVXzyNa0fV2GX89U8Hyb0HaMvjaIZGniAA==
+
+react-native-image-picker@^4.1.2:
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/react-native-image-picker/-/react-native-image-picker-4.1.2.tgz#1b4b4980a6878930675396c23dffbaa802cbbcc6"
+  integrity sha512-e4frAekSJkOgEmL9UOLukGhjtPwHSD7qSf3Rmwk+850ofxKqZFfAIfWc9MO3UmCb6G7oB6PkckyTOGOXybrN5A==
 
 react-native-safe-area-context@^3.3.2:
   version "3.3.2"

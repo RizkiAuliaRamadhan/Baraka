@@ -12,6 +12,7 @@ const Register = ({navigation}) => {
   const [tlp, setTlp] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordLogin, setPasswordLogin] = useState('');
   const [vertifikasiPassword, setVertifikasiPassword] = useState('');
   const [cekRegister, setCekRegister] = useState(false);
   const [pageLogin, setPageLogin] = useState(false);
@@ -44,8 +45,8 @@ const Register = ({navigation}) => {
   };
 
   const onSubmitLogin = () => {
-    if (email && password) {
-      dispatch(loginUser(email, password))
+    if (email && passwordLogin) {
+      dispatch(loginUser(email, passwordLogin));
       Alert.alert('Berhasil', 'Selamat Anda Berhasil Login', [
         {
           text: 'OK',
@@ -57,7 +58,7 @@ const Register = ({navigation}) => {
     } else {
       Alert.alert('Gagal', 'Form harus diisi semua');
     }
-  }
+  };
 
   const logout = () => {
     auth()
@@ -98,8 +99,6 @@ const Register = ({navigation}) => {
     return unsubscribe;
   }, [navigation]);
 
-  console.log(cekRegister);
-
   return (
     <View style={styles.container}>
       {cekRegister ? (
@@ -126,13 +125,15 @@ const Register = ({navigation}) => {
               height="45px"
               fontSize="18px"
               mt="18px"
-              value={password}
+              value={passwordLogin}
               onChangeText={value => {
-                setPassword(value);
+                setPasswordLogin(value);
               }}
-              secureTextEntry={true}
+              type="password"
             />
-            <TouchableOpacity style={styles.button} onPress={() => onSubmitLogin()}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => onSubmitLogin()}>
               <Text style={{color: '#fff', fontSize: 25}}>Masuk</Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -192,7 +193,8 @@ const Register = ({navigation}) => {
               onChangeText={value => {
                 setPassword(value);
               }}
-              secureTextEntry={true}
+              type="password"
+              overflow="visible"
             />
             <Input
               placeholder="Ulangi Password (min 6)"
@@ -203,7 +205,8 @@ const Register = ({navigation}) => {
               onChangeText={value => {
                 setVertifikasiPassword(value);
               }}
-              secureTextEntry={true}
+              type="password"
+              overflow="visible"
             />
             <TouchableOpacity style={styles.button} onPress={() => onSubmit()}>
               <Text style={{color: '#fff', fontSize: 25}}>Daftar Sekarang</Text>

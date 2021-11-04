@@ -5,11 +5,13 @@ import {
   Text,
   View,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import {Back} from '../../assets/icons';
 import {formatNumber, responsiveHeight, responsiveWidth} from '../../utils';
 import {Image, Input, Select, CheckIcon} from 'native-base';
 import CurrencyInput from 'react-native-currency-input';
+import {getData} from '../../utils/localStorage';
 
 const ZakatPertanian = ({route, navigation}) => {
   const data = route.params;
@@ -26,6 +28,7 @@ const ZakatPertanian = ({route, navigation}) => {
   const [kewajiban, setKewajiban] = useState('');
 
   const [selisihHarta, setSelisihHarta] = useState('');
+  const [totalSemua, setTotalSemua] = useState('');
 
   const [focus, setFocus] = useState('#d6d3d1');
   const [focus1, setFocus1] = useState('#d6d3d1');
@@ -82,13 +85,45 @@ const ZakatPertanian = ({route, navigation}) => {
   const Zakat = () => {
     if (selisihHarta !== '') {
       if (selisihHarta >= nishab) {
-        const totalZakat = (selisihHarta * 2.5) / 100;
-        return <Text style={styles.text5}>Rp {formatNumber(totalZakat)}</Text>;
+        setTotalSemua((selisihHarta * 2.5) / 100);
+        return <Text style={styles.text5}>Rp {formatNumber(totalSemua)}</Text>;
       } else {
         return <Text style={styles.text4}>Tidak wajib zakat</Text>;
       }
     } else {
       return <Text style={styles.text4}>Rupiah</Text>;
+    }
+  };
+
+  const onSubmitZakat = () => {
+    if (totalSemua) {
+      getData('user').then(res => {
+        if (res) {
+          const datas = {
+            image: data.image,
+            name: data.name,
+            namaDonatur: res.nama,
+            email: res.email,
+            uid: res.uid,
+            tlp: res.tlp,
+            kategori: data.kategori,
+            id: data.id,
+            total: totalSemua,
+          };
+          navigation.navigate('DetailDonasi2', datas);
+        } else {
+          Alert.alert('Maaf', 'Anda Belum Login', [
+            {
+              text: 'OK',
+              onPress: () => {
+                navigation.replace('BottomTab', {screen: 'Profile'});
+              },
+            },
+          ]);
+        }
+      });
+    } else {
+      Alert.alert('Gagal', 'Form harus lengkap');
     }
   };
 
@@ -317,7 +352,11 @@ const ZakatPertanian = ({route, navigation}) => {
         </View>
         {/* button */}
       </View>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          onSubmitZakat();
+        }}>
         <Text style={styles.textButton}>Bayar Zakat</Text>
       </TouchableOpacity>
     </ScrollView>

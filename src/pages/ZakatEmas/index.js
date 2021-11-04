@@ -5,11 +5,13 @@ import {
   Text,
   View,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import {Back} from '../../assets/icons';
 import {formatNumber, responsiveHeight, responsiveWidth} from '../../utils';
 import {Image, Input, Select, CheckIcon} from 'native-base';
 import CurrencyInput from 'react-native-currency-input';
+import {getData} from '../../utils/localStorage';
 
 const ZakatEmas = ({route, navigation}) => {
   const data = route.params;
@@ -20,6 +22,7 @@ const ZakatEmas = ({route, navigation}) => {
   const [hargaPerak, setHargaPerak] = useState('');
   const [totalZakatPerak, setTotalZakatPerak] = useState('');
   const [totalZakatEmas, setTotalZakatEmas] = useState('');
+  const [totalSemua, setTotalSemua] = useState('');
   const [focus, setFocus] = useState('#d6d3d1');
   const [focus1, setFocus1] = useState('#d6d3d1');
   const [focus2, setFocus2] = useState('#d6d3d1');
@@ -31,7 +34,9 @@ const ZakatEmas = ({route, navigation}) => {
   const CekTotalZakatEmas = () => {
     if (emas >= nishabEmas) {
       setTotalZakatEmas((hargaEmas * emas * 2.5) / 100);
-      return <Text style={styles.text5}>Rp {formatNumber(totalZakatEmas)}</Text>;
+      return (
+        <Text style={styles.text5}>Rp {formatNumber(totalZakatEmas)}</Text>
+      );
     } else {
       return <Text style={styles.text4}>Total Zakat Emas</Text>;
     }
@@ -39,17 +44,51 @@ const ZakatEmas = ({route, navigation}) => {
   const CekTotalZakatPerak = () => {
     if (perak >= nishabPerak) {
       setTotalZakatPerak((hargaPerak * perak * 2.5) / 100);
-      return <Text style={styles.text5}>Rp {formatNumber(totalZakatPerak)}</Text>;
+      return (
+        <Text style={styles.text5}>Rp {formatNumber(totalZakatPerak)}</Text>
+      );
     } else {
       return <Text style={styles.text4}>Total Zakat Perak</Text>;
     }
   };
   const TotalZakat = () => {
     if (perak >= nishabPerak || emas >= nishabEmas) {
-      const Total = totalZakatEmas + totalZakatPerak;
-      return <Text style={styles.text5}>Rp {formatNumber(Total)}</Text>;
+      setTotalSemua(totalZakatEmas + totalZakatPerak);
+      return <Text style={styles.text5}>Rp {formatNumber(totalSemua)}</Text>;
     } else {
       return <Text style={styles.text4}>Total Zakat Emas & Perak</Text>;
+    }
+  };
+
+  const onSubmitZakat = () => {
+    if (totalSemua) {
+      getData('user').then(res => {
+        if (res) {
+          const datas = {
+            image: data.image,
+            name: data.name,
+            namaDonatur: res.nama,
+            email: res.email,
+            uid: res.uid,
+            tlp: res.tlp,
+            kategori: data.kategori,
+            id: data.id,
+            total: totalSemua
+          };
+          navigation.navigate('DetailDonasi2', datas);
+        } else {
+          Alert.alert('Maaf', 'Anda Belum Login', [
+            {
+              text: 'OK',
+              onPress: () => {
+                navigation.replace('BottomTab', {screen: 'Profile'});
+              },
+            },
+          ]);
+        }
+      });
+    } else {
+      Alert.alert('Gagal', 'Form harus lengkap');
     }
   };
 
@@ -192,7 +231,11 @@ const ZakatEmas = ({route, navigation}) => {
         </View>
         {/* button */}
       </View>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          onSubmitZakat();
+        }}>
         <Text style={styles.textButton}>Bayar Zakat</Text>
       </TouchableOpacity>
     </ScrollView>

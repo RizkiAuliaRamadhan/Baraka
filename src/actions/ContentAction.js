@@ -18,7 +18,6 @@ export const getContents = search => {
           // hasil
           let data = querySnapsot.val();
           let dataItem = {...data};
-          console.log("search"+ dataItem);
           dispatchSuccess(dispatch, GET_CONTENTS, dataItem);
         })
         .catch(err => {
@@ -34,7 +33,6 @@ export const getContents = search => {
           dispatchSuccess(dispatch, GET_CONTENTS, dataItem);
         })
         .catch(err => {
-          console.log(err);
           alert(err);
         });
     }

@@ -10,6 +10,7 @@ import Person from './person.svg'
 import PersonActive from './personActive.svg'
 import Centang from './centang.svg'
 import Back from './back.svg'
+import Upload from './upload.svg'
 
 
-export {Menu, Search, Home, HomeActive, File, FileActive, Info, InfoActive, Person, PersonActive, Centang, Back};
+export {Menu, Search, Home, HomeActive, File, FileActive, Info, InfoActive, Person, PersonActive, Centang, Back, Upload};

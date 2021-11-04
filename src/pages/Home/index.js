@@ -43,7 +43,6 @@ const Home = ({navigation}) => {
     return (
       <>
         {Object.keys(contentRedux).map((key, index) => {
-          console.log("key : " + key);
           return (
             <>
               {contentRedux[key].kategori === 'donasi' ? (
@@ -60,7 +59,6 @@ const Home = ({navigation}) => {
     return (
       <>
         {Object.keys(contentRedux).map((key, index) => {
-          console.log("key : " + key);
           return (
             <>
               {contentRedux[key].kategori === 'sedekah' ? (

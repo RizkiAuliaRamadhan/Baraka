@@ -6,9 +6,11 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Alert
 } from 'react-native';
 import {Back, Centang} from '../../assets/icons';
 import {formatNumber, responsiveHeight, responsiveWidth} from '../../utils';
+import {getData} from '../../utils/localStorage';
 
 const DetailDonasi = ({route, navigation}) => {
   const data = route.params;
@@ -20,13 +22,36 @@ const DetailDonasi = ({route, navigation}) => {
   const value = (data.donasi / data.total) * 100;
 
   const onSubmitDonasi = () => {
-    navigation.navigate("DetailDonasi2")
-  }
+    getData('user').then(res => {
+      if (res) {
+        const datas = {
+          image: data.image,
+          name: data.name,
+          namaDonatur: res.nama,
+          email: res.email,
+          uid: res.uid,
+          tlp: res.tlp,
+          kategori: data.kategori,
+          id: data.id
+        };
+        navigation.navigate('DetailDonasi2', datas);
+      } else {
+        Alert.alert('Maaf', 'Anda Belum Login', [
+          {
+            text: 'OK',
+            onPress: () => {
+              navigation.replace('BottomTab', {screen: 'Profile'});
+            },
+          },
+        ]);
+      }
+    });
+  };
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
         {/* header */}
-        <View style={styles.header} >
+        <View style={styles.header}>
           <TouchableOpacity
             style={styles.back}
             onPress={() => navigation.goBack()}>
@@ -192,7 +217,11 @@ const DetailDonasi = ({route, navigation}) => {
         </View>
         <View style={{marginBottom: 20}} />
       </View>
-      <TouchableOpacity style={styles.button} onPress={() => {onSubmitDonasi()}} >
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          onSubmitDonasi();
+        }}>
         <Text style={styles.textButton}>Donasi Sekarang</Text>
       </TouchableOpacity>
     </ScrollView>
@@ -211,7 +240,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   text: {
     color: '#000',
@@ -219,7 +248,7 @@ const styles = StyleSheet.create({
   },
   back: {
     position: 'absolute',
-    left: 0
+    left: 0,
   },
   detailDonasi: {
     marginTop: responsiveHeight(25),

@@ -5,11 +5,13 @@ import {
   Text,
   View,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import {Back} from '../../assets/icons';
 import {formatNumber, responsiveHeight, responsiveWidth} from '../../utils';
 import {Image, Input, Select, CheckIcon} from 'native-base';
 import CurrencyInput from 'react-native-currency-input';
+import {getData} from '../../utils/localStorage';
 
 const ZakatPertanian = ({route, navigation}) => {
   const data = route.params;
@@ -33,6 +35,37 @@ const ZakatPertanian = ({route, navigation}) => {
       }
     } else {
       return <Text style={styles.text4}>Jumlah Dalam KG</Text>;
+    }
+  };
+
+  const onSubmitZakat = () => {
+    if (totalZakat) {
+      getData('user').then(res => {
+        if (res) {
+          const datas = {
+            image: data.image,
+            name: data.name,
+            namaDonatur: res.nama,
+            email: res.email,
+            uid: res.uid,
+            tlp: res.tlp,
+            kategori: data.kategori,
+            id: data.id,
+          };
+          navigation.navigate('DetailDonasi2', datas);
+        } else {
+          Alert.alert('Maaf', 'Anda Belum Login', [
+            {
+              text: 'OK',
+              onPress: () => {
+                navigation.replace('BottomTab', {screen: 'Profile'});
+              },
+            },
+          ]);
+        }
+      });
+    } else {
+      Alert.alert('Gagal', 'Form harus lengkap');
     }
   };
 
@@ -72,7 +105,7 @@ const ZakatPertanian = ({route, navigation}) => {
             onBlur={() => {
               setFocus('#d6d3d1');
             }}
-            placeholder="Emas dalam gram"
+            placeholder="Jumlah Dalam Kg"
             selectionColor="#000"
           />
           <View style={{marginTop: 20}} />
@@ -128,7 +161,7 @@ const ZakatPertanian = ({route, navigation}) => {
         </View>
         {/* button */}
       </View>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={() => {onSubmitZakat()}} >
         <Text style={styles.textButton}>Bayar Zakat</Text>
       </TouchableOpacity>
     </ScrollView>
@@ -219,11 +252,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#219FA6',
-    height: responsiveHeight(65)
+    height: responsiveHeight(65),
   },
   textButton: {
     fontSize: 20,
-    color: '#fff'
+    color: '#fff',
   },
   input: focus => ({
     paddingVertical: 10,

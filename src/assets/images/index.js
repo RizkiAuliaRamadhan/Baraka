@@ -16,7 +16,7 @@ import Fire from './fire.png'
 import Bulat from './bulat.png'
 import Petir from './petir.png'
 import Shield from './shield.png'
-import ImageCatatan from './catatan.png'
+import File from './file.png'
 
 
-export { Title, Sedekah, Zakat, Donasi, Afganistan, Afrika, MasjidMaluku, Pekerja, Jumat, Kurma, Emas, Pertanian, Uang, B, Shield, Fire, Bulat, Petir, ImageCatatan }
+export { Title, Sedekah, Zakat, Donasi, Afganistan, Afrika, MasjidMaluku, Pekerja, Jumat, Kurma, Emas, Pertanian, Uang, B, Shield, Fire, Bulat, Petir, File }
