@@ -5,9 +5,10 @@ import {
   TouchableOpacity,
   View,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import {dataContents, responsiveHeight, responsiveWidth} from '../../utils';
-import {Menu, Search} from '../../assets/icons';
+import {Menu, Refresh, Search} from '../../assets/icons';
 import {Input} from 'native-base';
 import {CardContent, CardZakat, Kategori} from '../../Components';
 import {dataZakat} from '../../utils/DummyData/zakat';
@@ -17,13 +18,16 @@ import {getContents} from '../../actions/ContentAction';
 const Home = ({navigation}) => {
   const DataZakat = dataZakat;
 
-  const [kategori, setKategori] = useState('Donasi');
+  const [kategori, setKategori] = useState('');
   const [search, setSearch] = useState('');
 
   // redux
   const dispatch = useDispatch();
   const contentRedux = useSelector(
     state => state.ContentsReducer.contentsResult,
+  );
+  const contentReduxLoading = useSelector(
+    state => state.ContentsReducer.contentsLoading,
   );
 
   useEffect(() => {
@@ -36,8 +40,9 @@ const Home = ({navigation}) => {
   }, [navigation]);
 
   const onSubmitSearch = () => {
-    dispatch(getContents(search))
-  }
+    setKategori('');
+    dispatch(getContents(search));
+  };
 
   const Donasi = () => {
     return (
@@ -46,7 +51,12 @@ const Home = ({navigation}) => {
           return (
             <>
               {contentRedux[key].kategori === 'donasi' ? (
-                <CardContent navigation={navigation} data={contentRedux[key]} key={index} />
+                <CardContent
+                  navigation={navigation}
+                  nameKey={key}
+                  data={contentRedux[key]}
+                  key={index}
+                />
               ) : null}
             </>
           );
@@ -62,7 +72,12 @@ const Home = ({navigation}) => {
           return (
             <>
               {contentRedux[key].kategori === 'sedekah' ? (
-                <CardContent navigation={navigation} data={contentRedux[key]} key={index} />
+                <CardContent
+                  navigation={navigation}
+                  nameKey={key}
+                  data={contentRedux[key]}
+                  key={index}
+                />
               ) : null}
             </>
           );
@@ -81,6 +96,44 @@ const Home = ({navigation}) => {
     );
   };
 
+  console.log(Object.keys(contentRedux).length);
+
+  const Contents = () => {
+    return (
+      <>
+        {Object.keys(contentRedux).length ? (
+          Object.keys(contentRedux).map((key, index) => {
+            return (
+              <>
+                <CardContent
+                  navigation={navigation}
+                  nameKey={key}
+                  data={contentRedux[key]}
+                  key={index}
+                />
+              </>
+            );
+          })
+        ) : (
+          <View
+            style={{
+              height: 300,
+              width: '100%',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>
+            <Text style={{color: '#000', fontSize: 20}}>Data Kosong</Text>
+            <TouchableOpacity
+              style={{marginTop: 20}}
+              onPress={() => {navigation.replace("BottomTab")}}>
+              <Refresh />
+            </TouchableOpacity>
+          </View>
+        )}
+      </>
+    );
+  };
+
   const Content = () => {
     return (
       <>
@@ -91,7 +144,7 @@ const Home = ({navigation}) => {
         ) : kategori === 'Zakat' ? (
           <Zakat key={true} />
         ) : (
-          <Text>Data Kosong</Text>
+          <Contents />
         )}
       </>
     );
@@ -145,7 +198,11 @@ const Home = ({navigation}) => {
         </View>
         {/* Content */}
         <View style={styles.content}>
-          <Content />
+          {contentReduxLoading ? (
+            <ActivityIndicator style={{marginTop: 100}} size="large" />
+          ) : (
+            <Content />
+          )}
         </View>
       </View>
     </ScrollView>

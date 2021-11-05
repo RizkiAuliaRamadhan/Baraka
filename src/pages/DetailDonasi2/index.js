@@ -23,10 +23,13 @@ import database from '@react-native-firebase/database';
 
 const DetailDonasi2 = ({route, navigation}) => {
   const data = route.params;
+  console.log(data);
 
   const [namaDonatur, setNamaDonatur] = useState(data.namaDonatur);
   const [email, setEmail] = useState(data.email);
-  const [nominalDonasi, setNominalDonasi] = useState(data.total ? data.total : "");
+  const [nominalDonasi, setNominalDonasi] = useState(
+    data.total ? data.total : '',
+  );
   const [metode, setMetode] = useState('');
   const [focus, setFocus] = useState('#d6d3d1');
 
@@ -84,24 +87,25 @@ const DetailDonasi2 = ({route, navigation}) => {
         );
       });
 
-      let datas = {
-        namaDonatur,
-        email,
-        nominalDonasi,
-        metode,
-        image: buktiTransfer._W,
-        uid: data.uid,
-        idDonasi: data.id,
-      };
-
       try {
         await task;
-        const url = storage()
+        const url = await storage()
           .ref('/buktiTransfer/' + fileName)
           .getDownloadURL();
 
-        setBuktiTransfer(url);
+        console.log(url);
         setUploading(false);
+        var datas = {
+          namaDonatur,
+          email,
+          nominalDonasi,
+          metode,
+          image: url,
+          uid: data.uid,
+          idDonasi: data.id,
+          status: "success",
+          namaDonasi: data.name
+        };
 
         Alert.alert(
           'Berhasil',
@@ -110,7 +114,16 @@ const DetailDonasi2 = ({route, navigation}) => {
             {
               text: 'OK',
               onPress: () => {
-                navigation.replace('BottomTab', {screen: 'Catatan'});
+                // Update Firebase
+                database()
+                  .ref('/contents/' + data.key)
+                  .update({
+                    donasi: parseInt(data.donasi) + parseInt(nominalDonasi),
+                  })
+                  .then(() => {
+                    console.log('dataset');
+                  });
+                navigation.replace('BottomTab', {screen: 'Home'});
               },
             },
           ],
@@ -119,8 +132,20 @@ const DetailDonasi2 = ({route, navigation}) => {
         console.log(e);
       }
       setImageViewer(null);
+
+      // masuk ke firebase riwayat
       database()
-        .ref('/riwayat/'+millisecond+detik+menit+jam+hari+tanggal+bulan+tahun)
+        .ref(
+          '/riwayat/' +
+            millisecond +
+            detik +
+            menit +
+            jam +
+            hari +
+            tanggal +
+            bulan +
+            tahun,
+        )
         .set(datas)
         .then(() => {
           console.log('Data Set');

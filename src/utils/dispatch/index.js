@@ -3,7 +3,7 @@ const dispatchLoading = (dispatch, type) => {
     type,
     payload: {
       loading: true,
-      data: [],
+      data: "",
       errorMessage: false,
     },
   });

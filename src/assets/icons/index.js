@@ -11,6 +11,7 @@ import PersonActive from './personActive.svg'
 import Centang from './centang.svg'
 import Back from './back.svg'
 import Upload from './upload.svg'
+import Download from './download.svg'
+import Refresh from './refresh'
 
-
-export {Menu, Search, Home, HomeActive, File, FileActive, Info, InfoActive, Person, PersonActive, Centang, Back, Upload};
+export {Menu, Search, Home, HomeActive, File, FileActive, Info, InfoActive, Person, PersonActive, Centang, Back, Download, Upload, Refresh};

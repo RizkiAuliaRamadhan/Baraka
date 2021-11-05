@@ -3,15 +3,16 @@ import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {formatNumber, kapital, responsiveHeight, responsiveWidth} from '../../utils';
 
-const CardContent = ({navigation, data}) => {
+const CardContent = ({navigation, data, nameKey}) => {
   //progress
   const value = (data.donasi / data.total) * 100;
+  const datas = {...data, key: nameKey}
 
   return (
     <TouchableOpacity
       style={styles.cardContent}
       onPress={() => {
-        navigation.navigate('DetailDonasi', data);
+        navigation.navigate('DetailDonasi', datas);
       }}>
       <Image
         source={{uri: data.image}}

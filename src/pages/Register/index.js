@@ -1,5 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Alert,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {MyColors} from '../../utils';
 import {Button, Input} from 'native-base';
 import {useDispatch, useSelector} from 'react-redux';
@@ -16,6 +23,7 @@ const Register = ({navigation}) => {
   const [vertifikasiPassword, setVertifikasiPassword] = useState('');
   const [cekRegister, setCekRegister] = useState(false);
   const [pageLogin, setPageLogin] = useState(false);
+  const [focus, setFocus] = useState('#d6d3d1');
 
   const dispatch = useDispatch();
 
@@ -120,16 +128,20 @@ const Register = ({navigation}) => {
                 setEmail(value);
               }}
             />
-            <Input
+            <TextInput
               placeholder="Password (min 6)"
-              height="45px"
-              fontSize="18px"
-              mt="18px"
+              secureTextEntry={true}
+              style={styles.input(focus)}
+              onFocus={() => {
+                setFocus('#38bdf8');
+              }}
+              onBlur={() => {
+                setFocus('#d6d3d1');
+              }}
               value={passwordLogin}
               onChangeText={value => {
                 setPasswordLogin(value);
               }}
-              type="password"
             />
             <TouchableOpacity
               style={styles.button}
@@ -267,4 +279,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 10,
   },
+  input: focus => ({
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    backgroundColor: '#fff',
+    marginTop: 10,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: focus,
+    height: 45,
+    fontSize: 18,
+  }),
 });

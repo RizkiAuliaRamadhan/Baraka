@@ -6,7 +6,7 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Alert
+  Alert,
 } from 'react-native';
 import {Back, Centang} from '../../assets/icons';
 import {formatNumber, responsiveHeight, responsiveWidth} from '../../utils';
@@ -17,6 +17,23 @@ const DetailDonasi = ({route, navigation}) => {
   const penerimaDana = data.penerimaDana;
   const penggalangDana = data.penggalangDana;
   const penyalurDana = data.penyalurDana;
+
+  // Manipulasi tanggal
+  
+  const date1 = new Date(data.waktuSekarang);
+  const date2 = new Date(data.akhirWaktu);
+  
+  const Difference_In_Time = date2.getTime() - date1.getTime();
+  const Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
+  
+  const bulan = new Date().getMonth()
+  const tanggal = new Date().getDate()
+  const tahun = new Date().getFullYear()
+  const waktuSekarang = new Date(`${bulan}/${tanggal}/${tahun}`)
+
+
+  const Difference_In_Time2 = waktuSekarang.getTime() - date1.getTime();
+  const Difference_In_Days2 = Difference_In_Time2 / (1000 * 3600 * 24);
 
   //progress
   const value = (data.donasi / data.total) * 100;
@@ -32,7 +49,9 @@ const DetailDonasi = ({route, navigation}) => {
           uid: res.uid,
           tlp: res.tlp,
           kategori: data.kategori,
-          id: data.id
+          id: data.id,
+          key: data.key,
+          donasi: data.donasi,
         };
         navigation.navigate('DetailDonasi2', datas);
       } else {
@@ -68,7 +87,7 @@ const DetailDonasi = ({route, navigation}) => {
           />
           <Text style={styles.text1}>{data.name}</Text>
           <Text style={styles.text2}>
-            {data.waktuSekarang} / {data.akhirWaktu} Days
+            {Difference_In_Days2} / {Difference_In_Days} Days
           </Text>
           <View
             style={{

@@ -153,6 +153,14 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
+                storeFile file('baraka.keystore')
+                storePassword ('rama2617')
+                keyAlias ('barakaTeam')
+                keyPassword ('android')
+            }
+        }
     }
     buildTypes {
         debug {
