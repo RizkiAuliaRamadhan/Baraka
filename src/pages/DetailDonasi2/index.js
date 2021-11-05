@@ -103,27 +103,31 @@ const DetailDonasi2 = ({route, navigation}) => {
           image: url,
           uid: data.uid,
           idDonasi: data.id,
-          status: "success",
-          namaDonasi: data.name
+          status: 'success',
+          namaDonasi: data.name,
         };
 
         Alert.alert(
           'Berhasil',
-          `Jazaakallahu Khairan ${data.namaDonatur} atas donasinya`,
+          `Jazaakumullahu Khairan ${data.namaDonatur} atas donasinya`,
           [
             {
               text: 'OK',
               onPress: () => {
-                // Update Firebase
-                database()
-                  .ref('/contents/' + data.key)
-                  .update({
-                    donasi: parseInt(data.donasi) + parseInt(nominalDonasi),
-                  })
-                  .then(() => {
-                    console.log('dataset');
-                  });
-                navigation.replace('BottomTab', {screen: 'Home'});
+                if (data.kategori === 'zakat') {
+                  navigation.replace('BottomTab', {screen: 'Home'});
+                } else {
+                  // Update Firebase
+                  database()
+                    .ref('/contents/' + data.key)
+                    .update({
+                      donasi: parseInt(data.donasi) + parseInt(nominalDonasi),
+                    })
+                    .then(() => {
+                      console.log('dataset');
+                    });
+                  navigation.replace('BottomTab', {screen: 'Home'});
+                }
               },
             },
           ],

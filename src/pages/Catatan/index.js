@@ -1,4 +1,4 @@
-import {Image, Link, Row} from 'native-base';
+import {Image, Link, Row, ScrollView} from 'native-base';
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -23,69 +23,74 @@ const Catatan = ({navigation}) => {
   }, [navigation]);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.text}>Riwayat</Text>
-      </View>
-      {riwayat ? (
-        Object.keys(riwayat).map((value, index) => {
-          const data = riwayat[value];
-          return (
-            <View style={styles.card} key={index}>
-              <Text style={styles.text1}>
-                Nama:{'  '} {data.namaDonatur}
-              </Text>
-              <Text style={styles.text1}>
-                Email:{'  '} {data.email}
-              </Text>
-              <Text style={styles.text1}>
-                Nominal:{'  '} {formatNumber(data.nominalDonasi)}
-              </Text>
-              <Text style={styles.text1}>
-                Donasi:{'  '} {data.namaDonasi}
-              </Text>
-              <Text style={styles.text1}>
-                Metode:{'  '} {data.metode}
-              </Text>
-              <Text style={styles.text1}>
-                Status:{'  '} {data.status}
-              </Text>
-              <Row>
-                <Text style={styles.text1}>Bukti:{'  '}</Text>
-                <Link href={data.image}>
-                  <Download />
-                </Link>
-              </Row>
-            </View>
-          );
-        })
-      ) : (
-        <View
-          style={{
-            width: '100%',
-            height: '70%',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}>
-          <Image source={File} alt="Gambar" />
-          <Text
-            style={{
-              fontSize: 24,
-              color: '#000',
-              textAlign: 'center',
-              fontWeight: '600',
-              marginTop: 50,
-            }}>
-            Anda belum memiliki Catatan Donasi
-          </Text>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate('BottomTab', {screen: 'Home'})}>
-            <Text style={{color: '#fff', fontSize: 22}}>Donasi Sekarang</Text>
-          </TouchableOpacity>
+    <ScrollView style={{backgroundColor: "#fff"}}>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.text}>Riwayat</Text>
         </View>
-      )}
-    </View>
+        {riwayat ? (
+          Object.keys(riwayat).map((value, index) => {
+            const data = riwayat[value];
+            return (
+              <View style={styles.card} key={index}>
+                <Text style={styles.text1}>
+                  Nama:{'  '} {data.namaDonatur}
+                </Text>
+                <Text style={styles.text1}>
+                  Email:{'  '} {data.email}
+                </Text>
+                <Text style={styles.text1}>
+                  Nominal:{'  '} {formatNumber(data.nominalDonasi)}
+                </Text>
+                <Text style={styles.text1}>
+                  Donasi:{'  '} {data.namaDonasi}
+                </Text>
+                <Text style={styles.text1}>
+                  Metode:{'  '} {data.metode}
+                </Text>
+                <Text style={styles.text1}>
+                  Status:{'  '} {data.status}
+                </Text>
+                <Row>
+                  <Text style={styles.text1}>Bukti:{'  '}</Text>
+                  <Link href={data.image}>
+                    <Download />
+                  </Link>
+                </Row>
+              </View>
+            );
+          })
+        ) : (
+          <View
+            style={{
+              width: '100%',
+              height: '70%',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginTop: 50
+            }}>
+            <Image source={File} alt="Gambar" />
+            <Text
+              style={{
+                fontSize: 24,
+                color: '#000',
+                textAlign: 'center',
+                fontWeight: '600',
+                marginTop: 50,
+              }}>
+              Anda belum memiliki Catatan Donasi
+            </Text>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() =>
+                navigation.navigate('BottomTab', {screen: 'Home'})
+              }>
+              <Text style={{color: '#fff', fontSize: 22}}>Donasi Sekarang</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </View>
+    </ScrollView>
   );
 };
 

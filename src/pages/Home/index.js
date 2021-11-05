@@ -151,7 +151,7 @@ const Home = ({navigation}) => {
   };
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView style={{backgroundColor: '#fff'}} showsVerticalScrollIndicator={false}>
       <View style={styles.container}>
         {/* Header */}
         <View style={styles.header}>
